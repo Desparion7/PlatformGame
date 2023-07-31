@@ -15,6 +15,8 @@ export class CollisionAnimation {
 		this.fps = 20;
 		this.frameInterval = 1000 / this.fps;
 		this.frameTimer = 0;
+		this.collisionsSound = new Audio();
+		this.collisionsSound.src = 'assets/boom.mp3';
 	}
 	draw(context) {
 		context.drawImage(
@@ -38,6 +40,7 @@ export class CollisionAnimation {
 		} else {
 			this.frameTimer += deltaTime;
 		}
+		if (this.frameX === 1) this.collisionsSound.play();
 		if (this.frameX > this.maxFrame) this.markedForDeletion = true;
 	}
 }
