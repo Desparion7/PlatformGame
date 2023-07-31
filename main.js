@@ -23,6 +23,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			this.Ui = new UI(this);
 			this.enemies = [];
 			this.particles = [];
+			this.maxParticles = 50;
 			this.enemyTimer = 0;
 			this.enemyInterval = 1000;
 			this.debug = true;
@@ -52,6 +53,9 @@ window.addEventListener('DOMContentLoaded', function () {
 					(particle) => !particle.markedforDeletion
 				);
 			});
+			if (this.particles.length > this.maxParticles) {
+				this.particles = this.particles.slice(0, this.maxParticles);
+			}
 		}
 		draw(context) {
 			this.backgorund.draw(context);
