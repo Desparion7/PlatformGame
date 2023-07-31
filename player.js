@@ -8,6 +8,7 @@ import {
 	Hit,
 } from './playerStates.js';
 import { CollisionAnimation } from './collisionAnimation.js';
+import { FloatingMessage } from './floatingMessages.js';
 
 export default class Player {
 	constructor(game) {
@@ -36,14 +37,17 @@ export default class Player {
 			new Diving(this.game),
 			new Hit(this.game),
 		];
+		this.currentState = null;
 	}
 	update(input, deltaTime) {
 		this.checkCollision();
 		this.currentState.handleInput(input);
 		// horizontal movment
 		this.x += this.speed;
-		if (input.includes('d')) this.speed = this.maxSpeed;
-		else if (input.includes('a')) this.speed = -this.maxSpeed;
+		if (input.includes('d') && this.currentState !== this.states[6])
+			this.speed = this.maxSpeed;
+		else if (input.includes('a') && this.currentState !== this.states[6])
+			this.speed = -this.maxSpeed;
 		else this.speed = 0;
 		// horizontal boundaries
 		if (this.x < 0) this.x = 0;
@@ -113,9 +117,21 @@ export default class Player {
 					this.currentState === this.states[4] ||
 					this.currentState === this.states[5]
 				) {
-					this.game.score++;
+					if (enemy.image.id === 'enemy_spider') {
+						this.game.floatingMessage.push(
+							new FloatingMessage('+2', enemy.x, enemy.y, 150, 50)
+						);
+						this.game.score += 2;
+					} else {
+						this.game.floatingMessage.push(
+							new FloatingMessage('+1', enemy.x, enemy.y, 150, 50)
+						);
+						this.game.score++;
+					}
 				} else {
 					this.setState(6, 0);
+					this.game.lives--;
+					if (this.game.lives <= 0) this.game.gameOver = true;
 				}
 			}
 		});

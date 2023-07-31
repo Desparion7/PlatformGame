@@ -7,7 +7,7 @@ import { UI } from './ui.js';
 window.addEventListener('DOMContentLoaded', function () {
 	const canvas = document.getElementById('canvas1');
 	const ctx = canvas.getContext('2d');
-	canvas.width = 500;
+	canvas.width = 900;
 	canvas.height = 500;
 
 	class Game {
@@ -24,16 +24,23 @@ window.addEventListener('DOMContentLoaded', function () {
 			this.enemies = [];
 			this.particles = [];
 			this.collisions = [];
+			this.floatingMessage = [];
 			this.maxParticles = 50;
 			this.enemyTimer = 0;
 			this.enemyInterval = 1000;
 			this.debug = false;
 			this.score = 0;
 			this.fontColor = 'black';
+			this.time = 0;
+			this.maxTime = 30000;
+			this.gameOver = false;
+			this.lives = 3;
 			this.player.currentState = this.player.states[0];
 			this.player.currentState.enter();
 		}
 		update(deltaTime) {
+			this.time += deltaTime;
+			if (this.time > this.maxTime) this.gameOver = true;
 			this.backgorund.update();
 			this.player.update(this.input.keys, deltaTime);
 			// adding enemies
@@ -47,6 +54,10 @@ window.addEventListener('DOMContentLoaded', function () {
 					(enemy) => !enemy.markedForDeletion
 				);
 			});
+			// adding floating message
+			this.floatingMessage.forEach((message) => {
+				message.update();
+			});
 			// adding particles
 			this.particles.forEach((particle) => {
 				particle.update();
@@ -55,7 +66,7 @@ window.addEventListener('DOMContentLoaded', function () {
 				);
 			});
 			if (this.particles.length > this.maxParticles) {
-				this.particles = this.particles.slice(0, this.maxParticles);
+				this.particles.length = this.maxParticles;
 			}
 			// handle collision sprites
 			this.collisions.forEach((collision) => {
@@ -64,12 +75,18 @@ window.addEventListener('DOMContentLoaded', function () {
 					(collision) => !collision.markedforDeletion
 				);
 			});
+			this.floatingMessage = this.floatingMessage.filter(
+				(message) => !message.markedForDeletion
+			);
 		}
 		draw(context) {
 			this.backgorund.draw(context);
 			this.player.draw(context);
 			this.enemies.forEach((enemy) => {
 				enemy.draw(context);
+			});
+			this.floatingMessage.forEach((message) => {
+				message.draw(context);
 			});
 			this.particles.forEach((particle) => {
 				particle.draw(context);
@@ -98,7 +115,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		game.update(deltaTime);
 		game.draw(ctx);
-		requestAnimationFrame(animate);
+		if (!game.gameOver) requestAnimationFrame(animate);
 	}
 
 	animate(0);
