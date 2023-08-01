@@ -154,7 +154,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		game.startGame = true;
 		game.input.setKeys();
 		game.menu.style.display = 'none';
-		// music.play();
+		music.play();
 	});
 	restartBtn.addEventListener('click', () => {
 		game.startGame = true;
