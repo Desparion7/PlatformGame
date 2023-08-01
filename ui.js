@@ -18,11 +18,15 @@ export class UI {
 		context.fillText('Score: ' + this.game.score, 20, 50);
 		// timer
 		context.font = this.fontSize * 0.8 + 'px ' + this.fontFamily;
-		context.fillText(
-			'Time: ' + (this.game.time * 0.001).toFixed(2),
-			20,
-			80
-		);
+		context.fillText('Super Mode: ', 20, 80);
+		if (this.game.superModeCharge === 100) {
+			context.fillStyle = 'red';
+			context.fillText('READY', 135, 80);
+		} else {
+			context.fillStyle = 'black';
+			context.fillText(this.game.superModeCharge, 135, 80);
+		}
+
 		// lives
 		for (let i = 0; i < this.game.lives; i++) {
 			context.drawImage(this.livesImage, 25 * i + 20, 95, 25, 25);

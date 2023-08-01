@@ -45,6 +45,8 @@ window.addEventListener('DOMContentLoaded', function () {
 			this.startGame = false;
 			this.gameOver = false;
 			this.lives = 3;
+			this.superModeMaxTime = 100;
+			this.superModeCharge = 100;
 			this.player.currentState = this.player.states[0];
 			this.player.currentState.enter();
 		}
@@ -154,7 +156,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		game.startGame = true;
 		game.input.setKeys();
 		game.menu.style.display = 'none';
-		music.play();
+		// music.play();
 	});
 	restartBtn.addEventListener('click', () => {
 		game.startGame = true;

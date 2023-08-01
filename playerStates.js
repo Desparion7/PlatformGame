@@ -27,6 +27,9 @@ export class Sitting extends State {
 		this.game.player.frameY = 5;
 	}
 	handleInput(input) {
+		if (this.game.superModeCharge < this.game.superModeMaxTime) {
+			this.game.superModeCharge++;
+		}
 		if (input.includes('a') || input.includes('d')) {
 			this.game.player.setState(states.RUNNING, 1);
 		} else if (input.includes('Enter')) {
@@ -44,6 +47,9 @@ export class Running extends State {
 		this.game.player.frameY = 3;
 	}
 	handleInput(input) {
+		if (this.game.superModeCharge < this.game.superModeMaxTime) {
+			this.game.superModeCharge++;
+		}
 		this.game.particles.unshift(
 			new Dust(
 				this.game,
@@ -55,7 +61,10 @@ export class Running extends State {
 			this.game.player.setState(states.SITTING, 0);
 		} else if (input.includes('w')) {
 			this.game.player.setState(states.JUMPING, 1);
-		} else if (input.includes('Enter')) {
+		} else if (
+			input.includes('Enter') &&
+			this.game.superModeCharge === 100
+		) {
 			this.game.player.setState(states.ROLLING, 2);
 		}
 	}
@@ -71,6 +80,9 @@ export class Jumping extends State {
 		this.game.player.frameY = 1;
 	}
 	handleInput(input) {
+		if (this.game.superModeCharge < this.game.superModeMaxTime) {
+			this.game.superModeCharge++;
+		}
 		if (this.game.player.vy > this.game.player.weight) {
 			this.game.player.setState(states.FALLING, 1);
 		} else if (input.includes('Enter')) {
@@ -90,6 +102,9 @@ export class Falling extends State {
 		this.game.player.frameY = 2;
 	}
 	handleInput(input) {
+		if (this.game.superModeCharge < this.game.superModeMaxTime) {
+			this.game.superModeCharge++;
+		}
 		if (this.game.player.onGround()) {
 			this.game.player.setState(states.RUNNING, 1);
 		} else if (input.includes('s')) {
@@ -107,6 +122,7 @@ export class Rolling extends State {
 		this.game.player.frameY = 6;
 	}
 	handleInput(input) {
+		this.game.superModeCharge--;
 		this.game.particles.unshift(
 			new Fire(
 				this.game,
@@ -114,7 +130,10 @@ export class Rolling extends State {
 				this.game.player.y + this.game.player.height * 0.5
 			)
 		);
-		if (!input.includes('Enter') && this.game.player.onGround()) {
+		if (
+			(!input.includes('Enter') && this.game.player.onGround()) ||
+			this.game.superModeCharge <= 0
+		) {
 			this.game.player.setState(states.RUNNING, 1);
 		} else if (!input.includes('Enter') && !this.game.player.onGround()) {
 			this.game.player.setState(states.FALLING, 1);
