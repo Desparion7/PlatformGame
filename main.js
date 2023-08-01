@@ -7,13 +7,17 @@ import { UI } from './ui.js';
 window.addEventListener('DOMContentLoaded', function () {
 	const canvas = document.getElementById('canvas1');
 	const ctx = canvas.getContext('2d');
+	const music = document.getElementById('music');
 	const startBtn = document.querySelector('.startBtn');
+	const restartBtn = document.querySelector('.restartBtn');
 	const menu = document.querySelector('.menu');
+	const restartMenu = document.querySelector('.restartMenu');
+	const scoreInfo = document.querySelector('.scoreInfo');
 	canvas.width = 900;
 	canvas.height = 500;
 
 	class Game {
-		constructor(width, height) {
+		constructor(menu, restartMenu, width, height) {
 			this.width = width;
 			this.height = height;
 			this.groundMargin = 80;
@@ -35,8 +39,11 @@ window.addEventListener('DOMContentLoaded', function () {
 			this.fontColor = 'black';
 			this.time = 0;
 			// this.maxTime = 30000;
-			this.gameOver = false;
+			this.menu = menu;
+			this.restartMenu = restartMenu;
+			this.scoreInfo = scoreInfo;
 			this.startGame = false;
+			this.gameOver = false;
 			this.lives = 3;
 			this.player.currentState = this.player.states[0];
 			this.player.currentState.enter();
@@ -111,9 +118,26 @@ window.addEventListener('DOMContentLoaded', function () {
 			}
 			this.enemies.push(new FlyingEnemy(this));
 		}
+		restart() {
+			this.player.currentState = this.player.states[0];
+			this.speed = 0;
+			this.enemies = [];
+			this.particles = [];
+			this.collisions = [];
+			this.floatingMessage = [];
+			this.enemyTimer = 0;
+			this.score = 0;
+			this.time = 0;
+			this.startGame = true;
+			this.gameOver = false;
+			this.lives = 3;
+			this.player.restart();
+			this.player.currentState.enter();
+			animate(0);
+		}
 	}
 
-	const game = new Game(canvas.width, canvas.height);
+	const game = new Game(menu, restartMenu, canvas.width, canvas.height);
 
 	let lastTime = 0;
 	function animate(timeStamp) {
@@ -129,6 +153,12 @@ window.addEventListener('DOMContentLoaded', function () {
 	startBtn.addEventListener('click', () => {
 		game.startGame = true;
 		game.input.setKeys();
-		menu.style.display = 'none';
+		game.menu.style.display = 'none';
+		// music.play();
+	});
+	restartBtn.addEventListener('click', () => {
+		game.startGame = true;
+		game.restartMenu.style.display = 'none';
+		game.restart();
 	});
 });

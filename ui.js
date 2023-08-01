@@ -29,20 +29,8 @@ export class UI {
 		}
 		// game over messages
 		if (this.game.gameOver) {
-			context.textAlign = 'center';
-			context.font = this.fontSize * 2 + 'px ' + this.fontFamily;
-
-			context.fillText(
-				`Your score is ${this.game.score}`,
-				this.game.width * 0.5,
-				this.game.height * 0.5 - 20
-			);
-			context.font = this.fontSize * 0.7 + 'px ' + this.fontFamily;
-			context.fillText(
-				'What are creatures of the night afraid of? You!!!',
-				this.game.width * 0.5,
-				this.game.height * 0.5 + 20
-			);
+			this.game.restartMenu.style.display = 'flex';
+			this.game.scoreInfo.textContent = `Your score is ${this.game.score}`;
 		}
 		context.restore();
 	}

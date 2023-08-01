@@ -12,7 +12,8 @@ body {
 	align-items: center;
 	height: 100vh;
 }
-.menu {
+.menu,
+.restartMenu {
 	position: absolute;
 	display: flex;
 	justify-content: center;
@@ -27,7 +28,10 @@ body {
 	border-radius: 8px;
 	z-index: 10;
 }
-.startBtn {
+.restartMenu {
+	display: none;
+}
+button {
 	padding: 0.8rem 1.2rem;
 	margin-top: 1rem;
 	font-size: 24px;
@@ -40,7 +44,7 @@ body {
 	cursor: pointer;
 	z-index: 10;
 }
-.menu button:hover {
+button:hover {
 	background-color: rgba(0, 0, 0, 0.7);
 }
 .menu p {
