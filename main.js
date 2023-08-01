@@ -7,6 +7,8 @@ import { UI } from './ui.js';
 window.addEventListener('DOMContentLoaded', function () {
 	const canvas = document.getElementById('canvas1');
 	const ctx = canvas.getContext('2d');
+	const startBtn = document.querySelector('.startBtn');
+	const menu = document.querySelector('.menu');
 	canvas.width = 900;
 	canvas.height = 500;
 
@@ -32,69 +34,74 @@ window.addEventListener('DOMContentLoaded', function () {
 			this.score = 0;
 			this.fontColor = 'black';
 			this.time = 0;
-			this.maxTime = 30000;
+			// this.maxTime = 30000;
 			this.gameOver = false;
+			this.startGame = false;
 			this.lives = 3;
 			this.player.currentState = this.player.states[0];
 			this.player.currentState.enter();
 		}
 		update(deltaTime) {
-			this.time += deltaTime;
-			if (this.time > this.maxTime) this.gameOver = true;
-			this.backgorund.update();
-			this.player.update(this.input.keys, deltaTime);
-			// adding enemies
-			if (this.enemyTimer > this.enemyInterval) {
-				this.addEnemy();
-				this.enemyTimer = 0;
-			} else this.enemyTimer += deltaTime;
-			this.enemies.forEach((enemy) => {
-				enemy.update(deltaTime);
-				this.enemies = this.enemies.filter(
-					(enemy) => !enemy.markedForDeletion
+			if (this.startGame) {
+				this.time += deltaTime;
+				if (this.time > this.maxTime) this.gameOver = true;
+				this.backgorund.update();
+				this.player.update(this.input.keys, deltaTime);
+				// adding enemies
+				if (this.enemyTimer > this.enemyInterval) {
+					this.addEnemy();
+					this.enemyTimer = 0;
+				} else this.enemyTimer += deltaTime;
+				this.enemies.forEach((enemy) => {
+					enemy.update(deltaTime);
+					this.enemies = this.enemies.filter(
+						(enemy) => !enemy.markedForDeletion
+					);
+				});
+				// adding floating message
+				this.floatingMessage.forEach((message) => {
+					message.update();
+				});
+				// adding particles
+				this.particles.forEach((particle) => {
+					particle.update();
+					this.particles = this.particles.filter(
+						(particle) => !particle.markedforDeletion
+					);
+				});
+				if (this.particles.length > this.maxParticles) {
+					this.particles.length = this.maxParticles;
+				}
+				// handle collision sprites
+				this.collisions.forEach((collision) => {
+					collision.update(deltaTime);
+					this.collisions = this.collisions.filter(
+						(collision) => !collision.markedforDeletion
+					);
+				});
+				this.floatingMessage = this.floatingMessage.filter(
+					(message) => !message.markedForDeletion
 				);
-			});
-			// adding floating message
-			this.floatingMessage.forEach((message) => {
-				message.update();
-			});
-			// adding particles
-			this.particles.forEach((particle) => {
-				particle.update();
-				this.particles = this.particles.filter(
-					(particle) => !particle.markedforDeletion
-				);
-			});
-			if (this.particles.length > this.maxParticles) {
-				this.particles.length = this.maxParticles;
 			}
-			// handle collision sprites
-			this.collisions.forEach((collision) => {
-				collision.update(deltaTime);
-				this.collisions = this.collisions.filter(
-					(collision) => !collision.markedforDeletion
-				);
-			});
-			this.floatingMessage = this.floatingMessage.filter(
-				(message) => !message.markedForDeletion
-			);
 		}
 		draw(context) {
 			this.backgorund.draw(context);
-			this.player.draw(context);
-			this.enemies.forEach((enemy) => {
-				enemy.draw(context);
-			});
-			this.floatingMessage.forEach((message) => {
-				message.draw(context);
-			});
-			this.particles.forEach((particle) => {
-				particle.draw(context);
-			});
-			this.collisions.forEach((collision) => {
-				collision.draw(context);
-			});
-			this.Ui.draw(context);
+			if (this.startGame) {
+				this.player.draw(context);
+				this.enemies.forEach((enemy) => {
+					enemy.draw(context);
+				});
+				this.floatingMessage.forEach((message) => {
+					message.draw(context);
+				});
+				this.particles.forEach((particle) => {
+					particle.draw(context);
+				});
+				this.collisions.forEach((collision) => {
+					collision.draw(context);
+				});
+				this.Ui.draw(context);
+			}
 		}
 		addEnemy() {
 			if (this.speed > 0 && Math.random() < 0.5) {
@@ -119,4 +126,9 @@ window.addEventListener('DOMContentLoaded', function () {
 	}
 
 	animate(0);
+	startBtn.addEventListener('click', () => {
+		game.startGame = true;
+		game.input.setKeys();
+		menu.style.display = 'none';
+	});
 });

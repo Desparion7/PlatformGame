@@ -43,20 +43,6 @@ export class UI {
 				this.game.width * 0.5,
 				this.game.height * 0.5 + 20
 			);
-
-			// } else {
-			// 	context.fillText(
-			// 		'Love at first bite?',
-			// 		this.game.width * 0.5,
-			// 		this.game.height * 0.5 - 20
-			// 	);
-			// 	context.font = this.fontSize * 0.7 + 'px ' + this.fontFamily;
-			// 	context.fillText(
-			// 		'Nope better luck next time!',
-			// 		this.game.width * 0.5,
-			// 		this.game.height * 0.5 + 20
-			// 	);
-			// }
 		}
 		context.restore();
 	}

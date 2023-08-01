@@ -3,7 +3,49 @@
 	padding: 0;
 	box-sizing: border-box;
 }
-
+body {
+	font-family: 'Creepster';
+}
+.game {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+.menu {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: 300px;
+	height: 300px;
+	font-size: 20px;
+	color: white;
+	letter-spacing: 3px;
+	background-color: rgb(43, 43, 43);
+	border-radius: 8px;
+	z-index: 10;
+}
+.startBtn {
+	padding: 0.8rem 1.2rem;
+	margin-top: 1rem;
+	font-size: 24px;
+	color: white;
+	font-family: 'Creepster';
+	letter-spacing: 3px;
+	border: none;
+	border-radius: 5px;
+	background-color: black;
+	cursor: pointer;
+	z-index: 10;
+}
+.menu button:hover {
+	background-color: rgba(0, 0, 0, 0.7);
+}
+.menu p {
+	margin: 0.3rem;
+}
 #canvas1 {
 	border: 5px solid black;
 	position: absolute;
@@ -12,7 +54,6 @@
 	transform: translate(-50%, -50%);
 	max-width: 100%;
 	max-height: 100%;
-	font-family: 'Creepster', cursive;
 }
 #player,
 #layer1,
