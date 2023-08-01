@@ -131,7 +131,11 @@ export default class Player {
 				} else {
 					this.setState(6, 0);
 					this.game.lives--;
-					if (this.game.lives <= 0) this.game.gameOver = true;
+					if (this.game.lives <= 0) {
+						this.game.gameOver = true;
+						this.game.music.pause();
+						this.game.overMusic.play();
+					}
 				}
 			}
 		});

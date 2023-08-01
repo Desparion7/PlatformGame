@@ -8,6 +8,7 @@ window.addEventListener('DOMContentLoaded', function () {
 	const canvas = document.getElementById('canvas1');
 	const ctx = canvas.getContext('2d');
 	const music = document.getElementById('music');
+	const over = document.getElementById('over');
 	const startBtn = document.querySelector('.startBtn');
 	const restartBtn = document.querySelector('.restartBtn');
 	const menu = document.querySelector('.menu');
@@ -20,6 +21,8 @@ window.addEventListener('DOMContentLoaded', function () {
 		constructor(menu, restartMenu, width, height) {
 			this.width = width;
 			this.height = height;
+			this.music = music;
+			this.overMusic = over;
 			this.groundMargin = 80;
 			this.speed = 0;
 			this.maxSpeed = 6;
@@ -53,7 +56,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		update(deltaTime) {
 			if (this.startGame) {
 				this.time += deltaTime;
-				if (this.time > this.maxTime) this.gameOver = true;
+				// if (this.time > this.maxTime) this.gameOver = true;
 				this.backgorund.update();
 				this.player.update(this.input.keys, deltaTime);
 				// adding enemies
@@ -121,6 +124,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			this.enemies.push(new FlyingEnemy(this));
 		}
 		restart() {
+			this.music.currentTime = 0
 			this.player.currentState = this.player.states[0];
 			this.speed = 0;
 			this.enemies = [];
@@ -133,6 +137,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			this.startGame = true;
 			this.gameOver = false;
 			this.lives = 3;
+			this.superModeCharge = 100;
 			this.player.restart();
 			this.player.currentState.enter();
 			animate(0);
@@ -156,11 +161,12 @@ window.addEventListener('DOMContentLoaded', function () {
 		game.startGame = true;
 		game.input.setKeys();
 		game.menu.style.display = 'none';
-		// music.play();
+		game.music.play();
 	});
 	restartBtn.addEventListener('click', () => {
 		game.startGame = true;
 		game.restartMenu.style.display = 'none';
 		game.restart();
+		game.music.play();
 	});
 });
